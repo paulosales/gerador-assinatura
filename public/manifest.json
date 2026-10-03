@@ -1,0 +1,15 @@
+{
+  "short_name": "Signature Generator",
+  "name": "HTML Email Signature Generator",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1d4ed8",
+  "background_color": "#f8fafc"
+}

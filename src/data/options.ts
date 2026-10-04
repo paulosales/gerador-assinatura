@@ -1,4 +1,4 @@
-import type { FontFamily, FontOption, SignatureData, TemplateOption } from '../types'
+import type { FontFamily, FontOption, SignatureData, TemplateId } from '../types'
 
 export const FONT_OPTIONS: FontOption[] = [
   { id: 'Arial', label: 'Arial', stack: 'Arial, Helvetica, sans-serif' },
@@ -16,23 +16,8 @@ export const FONT_STACKS: Record<FontFamily, string> = FONT_OPTIONS.reduce(
   {} as Record<FontFamily, string>,
 )
 
-export const TEMPLATE_OPTIONS: TemplateOption[] = [
-  {
-    id: 'classic',
-    label: 'Clássico Horizontal',
-    description: 'Foto à esquerda com divisória vertical e dados à direita.',
-  },
-  {
-    id: 'minimal',
-    label: 'Minimalista Vertical',
-    description: 'Sem foto, dados em linha única compacta com separadores.',
-  },
-  {
-    id: 'corporate',
-    label: 'Corporativo Elegante',
-    description: 'Logo acima, nome em destaque e badges para redes sociais.',
-  },
-]
+/** Template labels/descriptions live in the i18n resources (see `templates.*`). */
+export const TEMPLATE_IDS: TemplateId[] = ['classic', 'minimal', 'corporate']
 
 export const DEFAULT_SIGNATURE: SignatureData = {
   fullName: 'Alexandre Silva',

@@ -4,10 +4,12 @@ import {
   buildContactLines,
   buildPlainTextSignature,
   buildSocialEntries,
+  DEFAULT_CONTACT_LABELS,
   escapeAttribute,
   escapeHtml,
   fontStack,
   link,
+  type ContactLabels,
 } from './shared'
 
 const SEPARATOR = '<span style="color:#c4c7cc;padding:0 6px;">&bull;</span>'
@@ -17,9 +19,12 @@ const SEPARATOR = '<span style="color:#c4c7cc;padding:0 6px;">&bull;</span>'
  * Logo/photo centered on top, name in large bold type, a thin divider, social
  * badges, then a compact contact line. Centered, table-based, inline styles.
  */
-export function generateCorporateElegant(data: SignatureData): GeneratedSignature {
+export function generateCorporateElegant(
+  data: SignatureData,
+  labels: ContactLabels = DEFAULT_CONTACT_LABELS,
+): GeneratedSignature {
   const font = fontStack(data)
-  const contactLines = buildContactLines(data)
+  const contactLines = buildContactLines(data, labels)
   const socialEntries = buildSocialEntries(data)
   const roleParts = [data.jobTitle, data.company, data.department].filter(Boolean)
 
@@ -76,5 +81,5 @@ export function generateCorporateElegant(data: SignatureData): GeneratedSignatur
         </tr>${dividerRow}${badgesRow}${contactRow}
 </table>`
 
-  return { html, text: buildPlainTextSignature(data) }
+  return { html, text: buildPlainTextSignature(data, labels) }
 }

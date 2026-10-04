@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface CodeViewProps {
   html: string
 }
 
 export function CodeView({ html }: CodeViewProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   return (
@@ -15,7 +17,7 @@ export function CodeView({ html }: CodeViewProps) {
         aria-expanded={open}
         className="flex w-full items-center justify-between px-4 py-3 text-sm font-semibold text-slate-900"
       >
-        Ver código HTML gerado
+        {t('codeView.toggle')}
         <span aria-hidden="true" className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
           ▾
         </span>

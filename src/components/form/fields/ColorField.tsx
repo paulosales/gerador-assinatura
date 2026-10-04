@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 interface ColorFieldProps {
   label: string
   value: string
@@ -7,20 +9,22 @@ interface ColorFieldProps {
 const HEX_PATTERN = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
 
 export function ColorField({ label, value, onChange }: ColorFieldProps) {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col gap-1">
       <span className="text-sm font-medium text-slate-700">{label}</span>
       <div className="flex items-center gap-2">
         <input
           type="color"
-          aria-label={`${label} (seletor visual)`}
+          aria-label={t('form.colorField.pickerAriaLabel', { label })}
           value={HEX_PATTERN.test(value) ? value : '#000000'}
           onChange={(event) => onChange(event.target.value)}
           className="h-9 w-10 cursor-pointer rounded-md border border-slate-300 bg-white p-0.5"
         />
         <input
           type="text"
-          aria-label={`${label} (valor hexadecimal)`}
+          aria-label={t('form.colorField.hexAriaLabel', { label })}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder="#000000"

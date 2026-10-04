@@ -3,10 +3,12 @@ import {
   buildContactLines,
   buildPlainTextSignature,
   buildSocialEntries,
+  DEFAULT_CONTACT_LABELS,
   escapeAttribute,
   escapeHtml,
   fontStack,
   link,
+  type ContactLabels,
 } from './shared'
 
 /**
@@ -16,9 +18,12 @@ import {
  * no flex/grid, no base64/relative images) so it survives Gmail/Outlook/Apple
  * Mail/Thunderbird sanitization.
  */
-export function generateClassicHorizontal(data: SignatureData): GeneratedSignature {
+export function generateClassicHorizontal(
+  data: SignatureData,
+  labels: ContactLabels = DEFAULT_CONTACT_LABELS,
+): GeneratedSignature {
   const font = fontStack(data)
-  const contactLines = buildContactLines(data)
+  const contactLines = buildContactLines(data, labels)
   const socialEntries = buildSocialEntries(data)
   const hasPhoto = Boolean(data.photoUrl)
 
@@ -77,5 +82,5 @@ export function generateClassicHorizontal(data: SignatureData): GeneratedSignatu
   </tr>
 </table>`
 
-  return { html, text: buildPlainTextSignature(data) }
+  return { html, text: buildPlainTextSignature(data, labels) }
 }

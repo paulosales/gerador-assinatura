@@ -16,6 +16,8 @@ cliente de e-mail — ou exporte o código HTML puro.
   `text/plain`), com fallback automático via `execCommand('copy')` para navegadores sem suporte.
 - **Copiar código HTML puro** e **baixar arquivo `.html`** de backup.
 - Notificações (toast) de feedback para cada ação.
+- **Internacionalização (i18n)** com 24 idiomas, detecção automática do idioma do navegador e
+  seletor manual de idioma (veja a seção [🌐 Internacionalização](#-internacionalização) abaixo).
 
 ## 🔒 Regras de compatibilidade de e-mail (geração do HTML)
 
@@ -37,6 +39,7 @@ Essas regras são cobertas por testes automatizados em
 - [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vite.dev/) como build tool
 - [Tailwind CSS v4](https://tailwindcss.com/) para a UI da aplicação (não usado no HTML da assinatura)
+- [react-i18next](https://react.i18next.com/) + [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) para internacionalização
 - [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) para testes
 
 ## 🚀 Scripts
@@ -63,6 +66,11 @@ src/
     toast/           # sistema de notificações
   data/options.ts    # opções de fonte/template + dados padrão de exemplo
   hooks/             # hooks (useToast)
+  i18n/
+    index.ts          # inicialização do i18next (detecção de idioma, fallback, RTL)
+    languages.ts       # lista dos 24 idiomas suportados (código, nome nativo, direção)
+    types.ts           # schema `AppTranslations` que todo arquivo de idioma deve seguir
+    resources/         # um arquivo .ts por idioma (en, pt, es, fr, de, ar, zh, ja, ...)
   lib/
     signatureGenerator/  # geração do HTML (um arquivo por template) + helpers
     clipboard.ts          # cópia rica (ClipboardItem + fallback execCommand)
@@ -70,6 +78,25 @@ src/
   types.ts           # tipos compartilhados (SignatureData, templates, fontes)
   __tests__/         # testes de geração de HTML, clipboard e integração da UI
 ```
+
+## 🌐 Internacionalização
+
+A interface e o próprio conteúdo da assinatura gerada (rótulos como "E-mail", "Tel", "Site") são
+traduzidos com [react-i18next](https://react.i18next.com/) para **24 idiomas**, cobrindo os idiomas
+mais falados do mundo: inglês, mandarim, hindi, espanhol, francês, árabe, bengali, português, russo,
+urdu, indonésio, alemão, japonês, suaíli, tâmil, turco, vietnamita, coreano, persa, italiano,
+holandês, polonês, tailandês e ucraniano — incluindo suporte completo a **RTL** (árabe, persa e urdu).
+
+- **Detecção automática**: no primeiro acesso, o idioma do navegador do usuário
+  (`navigator.language`) é usado como padrão, com fallback para inglês caso o idioma não seja suportado.
+- **Seleção manual**: o seletor de idioma no cabeçalho permite trocar o idioma a qualquer momento;
+  a escolha é persistida em `localStorage` e prevalece em visitas futuras.
+- **`<html lang>` / `<html dir>`** são sincronizados automaticamente a cada troca de idioma.
+
+Para adicionar um novo idioma, crie `src/i18n/resources/<código>.ts` seguindo o tipo
+`AppTranslations` (definido em [`src/i18n/types.ts`](src/i18n/types.ts)), registre-o em
+[`src/i18n/resources/index.ts`](src/i18n/resources/index.ts) e em
+[`src/i18n/languages.ts`](src/i18n/languages.ts).
 
 ## 🔍 SEO
 

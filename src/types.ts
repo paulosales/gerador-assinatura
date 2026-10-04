@@ -36,12 +36,6 @@ export interface GeneratedSignature {
   text: string
 }
 
-export interface TemplateOption {
-  id: TemplateId
-  label: string
-  description: string
-}
-
 export interface FontOption {
   id: FontFamily
   label: string

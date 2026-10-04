@@ -1,5 +1,17 @@
 import { FONT_STACKS } from '../../data/options'
 import type { SignatureData } from '../../types'
+import type { AppTranslations } from '../../i18n/types'
+
+export type ContactLabels = AppTranslations['signatureLabels']
+
+/** English fallback used whenever the caller doesn't supply localized labels (e.g. tests). */
+export const DEFAULT_CONTACT_LABELS: ContactLabels = {
+  email: 'E-mail',
+  phone: 'Tel',
+  mobile: 'Mobile',
+  website: 'Site',
+  address: 'Address',
+}
 
 /** Escapes text that will be interpolated into HTML markup. */
 export function escapeHtml(value: string): string {
@@ -74,23 +86,30 @@ export interface ContactLine {
 }
 
 /** Builds the list of contact lines (email/phone/mobile/website/address) present in the form. */
-export function buildContactLines(data: SignatureData): ContactLine[] {
+export function buildContactLines(
+  data: SignatureData,
+  labels: ContactLabels = DEFAULT_CONTACT_LABELS,
+): ContactLine[] {
   const lines: ContactLine[] = []
   if (data.email) {
-    lines.push({ label: 'E-mail', value: data.email, href: toMailHref(data.email) })
+    lines.push({ label: labels.email, value: data.email, href: toMailHref(data.email) })
   }
   if (data.phone) {
-    lines.push({ label: 'Tel', value: data.phone, href: toTelHref(data.phone) })
+    lines.push({ label: labels.phone, value: data.phone, href: toTelHref(data.phone) })
   }
   if (data.mobile) {
-    lines.push({ label: 'Celular', value: data.mobile, href: toTelHref(data.mobile) })
+    lines.push({ label: labels.mobile, value: data.mobile, href: toTelHref(data.mobile) })
   }
   if (data.website) {
-    lines.push({ label: 'Site', value: toDisplayUrl(data.website), href: toAbsoluteUrl(data.website) })
+    lines.push({
+      label: labels.website,
+      value: toDisplayUrl(data.website),
+      href: toAbsoluteUrl(data.website),
+    })
   }
   const addressParts = [data.address, data.city, data.state].filter(Boolean)
   if (addressParts.length > 0) {
-    lines.push({ label: 'Endereço', value: addressParts.join(', '), href: '' })
+    lines.push({ label: labels.address, value: addressParts.join(', '), href: '' })
   }
   return lines
 }
@@ -141,14 +160,17 @@ export function buildBadgesRow(entries: SocialEntry[], data: SignatureData): str
       </table>`
 }
 
-export function buildPlainTextSignature(data: SignatureData): string {
+export function buildPlainTextSignature(
+  data: SignatureData,
+  labels: ContactLabels = DEFAULT_CONTACT_LABELS,
+): string {
   const lines: string[] = []
   lines.push(data.fullName)
   const roleLine = [data.jobTitle, data.company].filter(Boolean).join(' | ')
   if (roleLine) lines.push(roleLine)
   if (data.department) lines.push(data.department)
 
-  const contact = buildContactLines(data)
+  const contact = buildContactLines(data, labels)
     .map((item) => `${item.label}: ${item.value}`)
     .join(' | ')
   if (contact) lines.push(contact)

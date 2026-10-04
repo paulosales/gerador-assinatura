@@ -3,9 +3,11 @@ import {
   buildContactLines,
   buildPlainTextSignature,
   buildSocialEntries,
+  DEFAULT_CONTACT_LABELS,
   escapeHtml,
   fontStack,
   link,
+  type ContactLabels,
 } from './shared'
 
 const SEPARATOR = '<span style="color:#c4c7cc;padding:0 6px;">&bull;</span>'
@@ -15,9 +17,12 @@ const SEPARATOR = '<span style="color:#c4c7cc;padding:0 6px;">&bull;</span>'
  * No photo; everything is reduced to a couple of compact, single-line rows
  * joined by bullet separators. Still table-based with fully inline styles.
  */
-export function generateMinimalVertical(data: SignatureData): GeneratedSignature {
+export function generateMinimalVertical(
+  data: SignatureData,
+  labels: ContactLabels = DEFAULT_CONTACT_LABELS,
+): GeneratedSignature {
   const font = fontStack(data)
-  const contactLines = buildContactLines(data)
+  const contactLines = buildContactLines(data, labels)
   const socialEntries = buildSocialEntries(data)
 
   const roleParts = [data.jobTitle, data.company, data.department].filter(Boolean)
@@ -64,5 +69,5 @@ export function generateMinimalVertical(data: SignatureData): GeneratedSignature
   </tr>${contactRow}${socialRow}
 </table>`
 
-  return { html, text: buildPlainTextSignature(data) }
+  return { html, text: buildPlainTextSignature(data, labels) }
 }
